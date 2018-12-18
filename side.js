@@ -15,8 +15,8 @@ presents.push(newPresent(presentSpawnPointX, presentSpawnPointY));
 
 function newPlayer(x, y) {
 	let player = {
-		x: playerSpawnPointX,
-		y: playerSpawnPointY,
+		x: x,
+		y: y,
 		speed: 6,
 		size: 20
 	}
@@ -25,8 +25,8 @@ function newPlayer(x, y) {
 
 function newPresent(x, y) {
 	let present = {
-		x: presentSpawnPointX,
-		y: presentSpawnPointY,
+		x: x,
+		y: y,
 		speed: 1,
 		size: 20
 	}
@@ -37,7 +37,7 @@ function drawPlayer(pObject) {
 	ctx.drawImage(fgImg, pObject.x, pObject.y, pObject.size, pObject.size);
 }
 
-function drawPresent(prObject) {
+function drawPresent(prObject, x, y, size) {
 	ctx.drawImage(fgImg, prObject.x, prObject.y, prObject.size, prObject.size);
 }
 
@@ -101,8 +101,8 @@ function draw() {
 		}
 		if (element.y >= 800) {
 			ctx.clearRect(element.x, element.y, element.size, element.size);
-			window.newPresent(presentSpawnPointX, presentSpawnPointY);
-			window.drawPresent();
+			newPresent(presentSpawnPointX, presentSpawnPointY);
+			drawPresent(fgImg, element.x, element.y, element.size, element.size);
 		}
 	});
 	window.requestAnimationFrame(draw);
