@@ -15,8 +15,8 @@ presents.push(newPresent(presentSpawnPointX, presentSpawnPointY));
 
 function newPlayer(x, y) {
 	let player = {
-		x: playerSpawnPointX,
-		y: playerSpawnPointY,
+		x: x, // använd x y inputen från när du kallar på funktionen
+		y: y,
 		speed: 6,
 		size: 20
 	}
@@ -25,8 +25,8 @@ function newPlayer(x, y) {
 
 function newPresent(x, y) {
 	let present = {
-		x: presentSpawnPointX,
-		y: presentSpawnPointY,
+		x: x, // använd x y inputen från när du kallar på funktionen
+		y: y,
 		speed: 1,
 		size: 20
 	}
@@ -83,27 +83,34 @@ function draw() {
 
 	presents.forEach(element => {
 		element.y = element.y + element.speed;
-		drawPresent(element);
+		
 		if (element.y >= 10) {
 			element.speed = 2;
-		} if (element.y >= 30) {
+		} 
+		if (element.y >= 30) {
 			element.speed = 3;
-		} if (element.y >= 60) {
+		} 
+		if (element.y >= 60) {
 			element.speed = 4;
-		} if (element.y >= 100) {
+		} 
+		if (element.y >= 100) {
 			element.speed = 5;
-		} if (element.y >= 150) {
+		} 
+		if (element.y >= 150) {
 			element.speed = 6;
-		} if (element.y >= 210) {
+		} 
+		if (element.y >= 210) {
 			element.speed = 7;
-		} if (element.y >= 280) {
+		} 
+		if (element.y >= 280) {
 			element.speed = 8;
 		}
 		if (element.y >= 800) {
 			ctx.clearRect(element.x, element.y, element.size, element.size);
-			window.newPresent(presentSpawnPointX, presentSpawnPointY);
-			window.drawPresent();
+			newPresent(presentSpawnPointX, presentSpawnPointY);
+			//drawPresent(); du kan inte kalla på denna utan x och y, därav undefined
 		}
+		drawPresent(element); // flyttade den här
 	});
 	window.requestAnimationFrame(draw);
 }
