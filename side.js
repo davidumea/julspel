@@ -4,8 +4,10 @@ let fgImg = document.getElementById("fg-gfx");
 let eldImg = document.getElementById("eld-gfx");
 let elfImg = document.getElementById("elf-gfx");
 let prsImg = document.getElementById("prs-gfx");
+let hrtImg = document.getElementById("hrt-gfx");
 let px;
 let py;
+let livesLoss = false;
 
 lives = 3;
 score = 0;
@@ -17,11 +19,23 @@ playerSpawnPointY = 650;
 presentSpawnPointX = Math.floor((Math.random()*849) + 1);
 presentSpawnPointY = 0;
 
-
+let hearts = [];
+hearts.push(newHeart(10, 20));
+hearts.push(newHeart(40, 20));
+hearts.push(newHeart(70, 20));
 let players = [];
 players.push(newPlayer(playerSpawnPointX, playerSpawnPointY));
 let presents = [];
 presents.push(newPresent(presentSpawnPointX, presentSpawnPointY));
+
+function newHeart(x, y) {
+	let heart = {
+		x: x,
+		y: y,
+		size: 20
+	}
+	return heart;
+}
 
 function newPlayer(x, y) {
 	let player = {
@@ -43,10 +57,15 @@ function newPresent(x, y) {
 	return present;
 }
 
+function drawHeart(hObject) {
+	ctx.drawImage(hrtImg, hObject.x, hObject.y, hObject.size, hObject.size);
+}
+
 function drawPlayer(pObject) {
 	ctx.drawImage(elfImg, pObject.x, pObject.y, pObject.size, pObject.size);
 	if (Number.isInteger(scoreIsInteger)) {
-		//pObject.speed = pObject.speed + 1;
+		pObject.speed++;
+		scoreIsInteger = scoreIsInteger + 0.2;
 		console.log(pObject.speed);
 	}
 	if (pObject.x <= 0) {
@@ -67,10 +86,19 @@ function drawPresent(prObject, x, y, size) {
 	if (prObject.y > 650) {
 		presents.splice(presents.indexOf(prObject),1);
 		lives--;
+		hearts.pop();
 		console.log("Live(s): " + lives);
 		if (lives == 0) {
 			presents.splice(presents.indexOf(prObject),1);
-			console.log("du är trash");
+			if (score < 40) {
+				console.log("Du räddade " + score + ", helt värdelöst resultat.");
+			} else if (score >= 40 && score < 70) {
+				console.log("Du räddade " + score + ", mediokert");
+			} else if (score >= 70 && score < 100) {
+				console.log("Du räddade " + score + " paket! Vilken jävla superstar!!!");
+			} else if (score >= 100) {
+				console.log("Du är legit en gud (" + score + " paket räddade)");
+			}
 		} else {
 			presents.push(newPresent(Math.floor((Math.random()*849) + 1), presentSpawnPointY));
 		}
@@ -80,7 +108,6 @@ function drawPresent(prObject, x, y, size) {
 		score++;
 		scoreIsInteger = score / 5;
 		presentSpeedAccel = presentSpeedAccel + 0.005;
-		console.log("Present Speed: " + presentSpeedAccel);
 		console.log("Score: " + score);
 		if (lives > 0) {
 			presents.push(newPresent(Math.floor((Math.random()*849) + 1), presentSpawnPointY));
@@ -143,6 +170,11 @@ function draw() {
 	ctx.clearRect(0,0,900,900);
 	ctx.drawImage(eldImg, 0, 700, 900, 200);
 	ctx.drawImage(eldImg, (0 + 0), (700 + 0), 900, 200);
+
+	hearts.forEach(element => {
+		drawHeart(element);
+	});
+
 	players.forEach(element => {
 		if (move.left) { 
 			element.x = element.x - element.speed;
